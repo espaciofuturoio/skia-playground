@@ -30,6 +30,7 @@ export default function RootLayout() {
         <View style={[styles.container, { backgroundColor: appTheme.background }]}>
           <Stack
             screenOptions={{
+              headerShown: false,
               headerStyle: {
                 backgroundColor: appTheme.headerBackground,
               },
