@@ -1,39 +1,59 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
+import { createContext } from "react";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// Define a single, attractive theme
+const appTheme = {
+  background: "#f8f9fa",
+  card: "#ffffff",
+  text: "#2d3436",
+  border: "#e0e0e0",
+  accent: "#3498db",
+  headerBackground: "#ffffff",
+  secondaryText: "#636e72",
+  success: "#00b894",
+  warning: "#fdcb6e",
+  error: "#d63031",
+  shadowColor: "rgba(0,0,0,0.1)",
+};
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// Create a context to share theme across the app
+export const ThemeContext = createContext(appTheme);
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <ThemeContext.Provider value={appTheme}>
+      <GestureHandlerRootView style={styles.container}>
+        <StatusBar style="dark" />
+        <View style={[styles.container, { backgroundColor: appTheme.background }]}>
+          <Stack
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: appTheme.headerBackground,
+              },
+              headerTintColor: appTheme.text,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontWeight: "600",
+              },
+              contentStyle: {
+                backgroundColor: appTheme.background,
+              },
+              animation: "slide_from_right",
+              // Make sure content can scroll under the header
+              headerTransparent: false,
+            }}
+          />
+        </View>
+      </GestureHandlerRootView>
+    </ThemeContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
