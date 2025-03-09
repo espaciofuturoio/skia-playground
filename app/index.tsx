@@ -38,6 +38,7 @@ export default function Index() {
             {[
               { id: "demo1", title: "Demo 1", route: "/demo1" as const, description: "SVG Rendering" },
               { id: "demo2", title: "Demo 2", route: "/demo2" as const, description: "Animation Effects" },
+              { id: "demo3", title: "Demo 3", route: "/demo3" as const, description: "SVG Scaling" },
             ].map((demo) => (
               <Pressable
                 key={demo.id}
