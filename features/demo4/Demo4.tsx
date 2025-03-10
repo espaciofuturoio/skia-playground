@@ -12,49 +12,64 @@ const orangeGrid = [
   { id: 6, row: 1, col: 2 },
 ];
 
+const [width, height] = [350, 350];
 export const Demo4 = () => {
-  const { width, height } = useWindowDimensions();
-  console.log({ width, height });
-  // Calculate size based on screen width but with a reasonable maximum
-  const canvasSize = Math.min(width * 0.8, height * 0.8);
+
+  // Make canvas size responsive with separate dimensions for x and y
+  const canvasSizeX = width;
+  const canvasSizeY = height;
 
   // Parse the SVG
   const [scaleRedSvg, orangeSvg] = [Skia.SVG.MakeFromString(scaleRed), Skia.SVG.MakeFromString(orange)];
   const [scaleWidth, scaleHeight] = [scaleRedSvg?.width() || 0, scaleRedSvg?.height() || 0];
   const [orangeWidth, orangeHeight] = [orangeSvg?.width() || 0, orangeSvg?.height() || 0];
 
-  const gridSpacing = 80; // Absolute spacing in pixels
-  const gridOffsetX = (canvasSize - (gridSpacing * 3)) / 2; // Center grid horizontally
-  const gridOffsetY = 40; // Absolute padding from top in pixels
+  // Make grid spacing proportional to canvas width
+  const gridItemsPerRow = 3;
+  const gridSpacing = canvasSizeX / (gridItemsPerRow + 1); // Proportional spacing
 
-  // Define circle properties for corners
-  const circleRadius = 15; // Size of corner circles
-  const circleColor = "#FF00FF"; // Magenta color for visibility
+  // Center grid horizontally with proportional calculations
+  const gridOffsetX = (canvasSizeX - (gridSpacing * gridItemsPerRow)) / 2;
+
+  // Top padding as proportion of canvas height
+  const gridOffsetY = canvasSizeY * 0.05; // 5% of canvas height
+
+  // Define circle properties relative to canvas size
+  const circleRadius = Math.min(canvasSizeX, canvasSizeY) * 0.02; // 2% of smallest dimension
+
+  console.log({ scaleWidth, scaleHeight });
 
   return (
     <View style={styles.container}>
-      <Canvas style={{ width: canvasSize, height: canvasSize }}>
+      <Canvas style={{ width: canvasSizeX, height: canvasSizeY }}>
         {/* Corner circles to demonstrate positioning */}
-        <Circle cx={0} cy={0} r={circleRadius} color={circleColor} />
-        <Circle cx={canvasSize} cy={0} r={circleRadius} color={circleColor} />
-        <Circle cx={0} cy={canvasSize} r={circleRadius} color={circleColor} />
-        <Circle cx={canvasSize} cy={canvasSize} r={circleRadius} color={circleColor} />
+        <Circle cx={0} cy={0} r={circleRadius} color={"#FF0033"} />
+        <Circle cx={canvasSizeX} cy={0} r={circleRadius} color={"#FF00FF"} />
+        <Circle cx={0} cy={canvasSizeY} r={circleRadius} color={"blue"} />
+        <Circle cx={canvasSizeX} cy={canvasSizeY} r={circleRadius} color={"green"} />
 
-        <Group>
+        <Group transform={[
+          { translateX: canvasSizeX / 2 },
+          { translateY: canvasSizeY / 2 },
+        ]}>
+
           <ImageSVG
             svg={scaleRedSvg}
+            x={-(canvasSizeX / 2) + 10}
+            y={1}
           />
+
+          {/* Grid of oranges positioned above the scale */}
+          {orangeGrid.map((item) => (
+            <Group key={item.id}>
+              <ImageSVG
+                svg={orangeSvg}
+                x={gridOffsetX + (item.col * gridSpacing) - (orangeWidth / 2)}
+                y={gridOffsetY + (item.row * gridSpacing) - (orangeHeight / 2)}
+              />
+            </Group>
+          ))}
         </Group>
-        {/* Grid of oranges positioned above the scale */}
-        {orangeGrid.map((item) => (
-          <Group key={item.id}>
-            <ImageSVG
-              svg={orangeSvg}
-              x={gridOffsetX + (item.col * gridSpacing)}
-              y={gridOffsetY + (item.row * gridSpacing)}
-            />
-          </Group>
-        ))}
       </Canvas>
     </View>
   );
@@ -62,8 +77,7 @@ export const Demo4 = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
 });

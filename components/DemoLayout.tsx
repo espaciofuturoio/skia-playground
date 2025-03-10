@@ -15,6 +15,18 @@ export function DemoLayout({ title, children }: DemoLayoutProps) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.backButton,
+          {
+            backgroundColor: theme.card,
+            opacity: pressed ? 0.8 : 1,
+          },
+        ]}
+        onPress={() => router.push("/")}
+      >
+        <Text style={[styles.buttonText, { color: theme.text }]}>← Back</Text>
+      </Pressable>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
@@ -23,19 +35,6 @@ export function DemoLayout({ title, children }: DemoLayoutProps) {
         <View style={styles.canvasContainer}>
           {children}
         </View>
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.backButton,
-            {
-              backgroundColor: theme.card,
-              opacity: pressed ? 0.8 : 1,
-            },
-          ]}
-          onPress={() => router.push("/")}
-        >
-          <Text style={[styles.buttonText, { color: theme.text }]}>← Back</Text>
-        </Pressable>
       </View>
     </SafeAreaView>
   );
