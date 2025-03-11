@@ -4,8 +4,8 @@ import { ScaleGrey } from "@/features/ScaleGrey/ScaleGrey";
 import { ScaleRed } from "@/features/ScaleGrey/ScaleRed";
 import type { GridItem } from "@/features/ScaleGrey/types";
 import { router } from 'expo-router';
-import { Confetti } from 'react-native-fast-confetti';
-import { useState } from 'react';
+import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
+import { useRef, useState } from 'react';
 
 const greyScaleLeftGrid: GridItem[] = [
   { id: 1, row: 0, col: 0, type: "orange" },
@@ -36,12 +36,14 @@ const options = [
 
 export default function Demo6Page() {
   const [isConfettiActive, setIsConfettiActive] = useState(false);
+  const confettiRef = useRef<ConfettiMethods>(null);
 
   const handleAnswerSubmit = (optionId: string, isCorrect: boolean) => {
     console.log(`Option ${optionId} selected, correct: ${isCorrect}`);
+    setIsConfettiActive(isCorrect);
     if (isCorrect) {
-      setIsConfettiActive(true);
-    } 
+      confettiRef.current?.restart();
+    }
   };
 
   const handleBackPress = () => {
@@ -62,7 +64,7 @@ export default function Demo6Page() {
           <ScaleRed grid={redScaleGrid} displayValue="88" debug={false} />
         </View>
       </ResponsePad>
-      {isConfettiActive && <Confetti fadeOutOnEnd />}
+      {isConfettiActive && <Confetti ref={confettiRef} fadeOutOnEnd isInfinite={false} fallDuration={3000} />}
     </View>
   );
 }
