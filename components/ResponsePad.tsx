@@ -1,13 +1,20 @@
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { View, Text, StyleSheet, Pressable, Platform, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Platform, ScrollView, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSequence,
   withSpring,
-  withTiming
+  withTiming,
+  withDelay,
+  Easing
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isMobile } from 'react-device-detect';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export interface Option {
   id: string;
@@ -33,10 +40,38 @@ export const ResponsePad = ({
   showBackButton = true,
   onBackPress
 }: ResponsePadProps) => {
+  const insets = useSafeAreaInsets();
   const selectedOption = useSharedValue<string | null>(null);
   const isCorrect = useSharedValue(false);
   const shake = useSharedValue(0);
   const progress = useSharedValue(0);
+  const contentOpacity = useSharedValue(0);
+
+  // Initialize fade-in animation on mount
+  useEffect(() => {
+    // Small delay before starting animation for better perceived performance
+    contentOpacity.set(withDelay(150, withTiming(1, {
+      duration: 800,
+      easing: Easing.out(Easing.ease)
+    })));
+  }, [contentOpacity]);
+
+  // Add viewport height adjustment
+  useEffect(() => {
+    if (Platform.OS === 'web' && isMobile) {
+      const adjustViewportHeight = () => {
+        // Set CSS variable for viewport height
+        document.documentElement.style.setProperty(
+          '--vh',
+          `${window.innerHeight * 0.01}px`
+        );
+      };
+
+      adjustViewportHeight();
+      window.addEventListener('resize', adjustViewportHeight);
+      return () => window.removeEventListener('resize', adjustViewportHeight);
+    }
+  }, []);
 
   const handleOptionPress = (optionId: string) => {
     if (selectedOption.get() !== null) return;
@@ -72,10 +107,31 @@ export const ResponsePad = ({
     }, 2000);
   };
 
+  const canvasAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.get()
+    };
+  });
+
+  // Calculate response pad height based on screen height
+  const getResponsePadHeight = () => {
+    if (Platform.OS === 'ios') {
+      // For taller iOS devices (like iPhone 12 and up)
+      if (SCREEN_HEIGHT > 800) {
+        return 180;
+      }
+      return 170;
+    }
+    if (Platform.OS === 'web') {
+      return 180;
+    }
+    return 140;
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, Platform.OS === 'ios' ? 44 : 20) }]}>
         {showBackButton && (
           <Pressable
             style={styles.backButton}
@@ -99,23 +155,32 @@ export const ResponsePad = ({
       {/* Content Area */}
       <ScrollView
         style={styles.contentContainer}
-        contentContainerStyle={styles.contentContainerStyle}
+        contentContainerStyle={[
+          styles.contentContainerStyle,
+          {
+            paddingBottom: getResponsePadHeight() + insets.bottom + 20
+          }
+        ]}
       >
         {/* Question */}
         <Text style={styles.question}>
           {title}
         </Text>
 
-        {/* Custom Content */}
-        <View style={styles.childrenContainer}>
+        {/* Custom Content with fade-in animation */}
+        <Animated.View style={[styles.childrenContainer, canvasAnimatedStyle]}>
           {children}
-        </View>
+        </Animated.View>
       </ScrollView>
 
       {/* Response Pad Grid */}
       <Animated.View
         style={[
           styles.responsePad,
+          {
+            height: getResponsePadHeight(),
+            paddingBottom: insets.bottom
+          },
           useAnimatedStyle(() => ({
             transform: [{ translateX: shake.get() }]
           }))
@@ -183,7 +248,7 @@ export const ResponsePad = ({
                     styles.optionText,
                     selectedOption.get() === option.id && styles.selectedOptionText
                   ]}>
-                    {option.text}
+                    {option.text + ' ERROR HERE'}
                   </Text>
                 </Animated.View>
               </Pressable>
@@ -203,7 +268,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: Platform.OS === 'ios' ? 60 : 20,
     paddingHorizontal: 20,
     paddingBottom: 20,
     gap: 16,
@@ -233,7 +297,6 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingHorizontal: 20,
-    paddingBottom: 150, // Add extra padding to account for response pad
   },
   question: {
     fontSize: 24,
@@ -251,7 +314,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 140,
     backgroundColor: '#F0F0F0',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -260,16 +322,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 8,
+    ...(Platform.OS === 'web' && {
+      position: 'fixed',
+      bottom: 'env(safe-area-inset-bottom)',
+    }),
   },
   gridContainer: {
     flex: 1,
-    padding: 12,
-    gap: 8,
+    padding: 16,
+    gap: 16,
   },
   gridRow: {
     flex: 1,
     flexDirection: 'row',
-    gap: 8,
+    gap: 16,
+    height: Platform.OS === 'ios' ? 60 : 'auto',
   },
   optionButton: {
     flex: 1,
@@ -291,13 +358,15 @@ const styles = StyleSheet.create({
   },
   optionContent: {
     flex: 1,
-    padding: 12,
+    padding: Platform.OS === 'ios' ? 12 : 16,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#E5E5E5',
     borderRadius: 12,
+    height: Platform.OS === 'ios' ? 60 : 'auto',
+    height: Platform.OS === 'ios' ? 80 : 'auto',
   },
   optionText: {
     fontSize: 16,

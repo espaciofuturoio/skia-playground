@@ -3,6 +3,7 @@ import { ResponsePad } from '@/components/ResponsePad';
 import { ScaleGrey } from "@/features/ScaleGrey/ScaleGrey";
 import { ScaleRed } from "@/features/ScaleGrey/ScaleRed";
 import type { GridItem } from "@/features/ScaleGrey/types";
+import { router } from 'expo-router';
 
 const greyScaleLeftGrid: GridItem[] = [
   { id: 1, row: 0, col: 0, type: "orange" },
@@ -36,12 +37,17 @@ export default function Demo6Page() {
     console.log(`Option ${optionId} selected, correct: ${isCorrect}`);
   };
 
+  const handleBackPress = () => {
+    router.push('/');
+  };
+
   return (
     <ResponsePad
       title="¿Cuanto pesa una naranja?"
       options={options}
       correctOptionId="B"
       onAnswerSubmit={handleAnswerSubmit}
+      onBackPress={handleBackPress}
     >
       <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
         <ScaleGrey leftGrid={greyScaleLeftGrid} rightGrid={greyScaleRightGrid} debug={false} />

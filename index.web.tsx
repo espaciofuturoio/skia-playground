@@ -51,7 +51,7 @@ logoElement.style.cssText = `
 
 // Add an "S" letter inside the logo for Skia
 const letterElement = document.createElement("div");
-letterElement.textContent = "S";
+letterElement.textContent = "800";
 letterElement.style.cssText = `
 	color: white;
 	font-size: 32px;
@@ -63,7 +63,7 @@ logoElement.appendChild(letterElement);
 
 // Add loading text
 const loadingTextElement = document.createElement("div");
-loadingTextElement.textContent = "Loading Skia...";
+loadingTextElement.textContent = "Loading...";
 loadingTextElement.style.cssText = `
 	color: white;
 	font-size: 16px;
@@ -111,6 +111,10 @@ style.textContent = `
 		50% { opacity: 1; transform: scale(1); }
 	}
 	
+	:root {
+		--vh: 1vh;
+	}
+	
 	body {
 		margin: 0;
 		padding: 0;
@@ -119,7 +123,14 @@ style.textContent = `
 	
 	#root {
 		height: 100vh;
+		height: calc(var(--vh, 1vh) * 100);
 		width: 100vw;
+	}
+
+	@supports (padding: env(safe-area-inset-bottom)) {
+		.responsePad {
+			padding-bottom: env(safe-area-inset-bottom);
+		}
 	}
 `;
 

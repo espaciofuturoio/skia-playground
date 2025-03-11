@@ -22,14 +22,14 @@ export default function Index() {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={[styles.title, { color: theme.text }]}>Skia Playground</Text>
+            <Text style={[styles.title, { color: theme.text }]}>React Native Skia Playground</Text>
           </View>
 
           <View style={styles.canvasContainer}>
             <Home />
           </View>
 
-          <Text style={[styles.sectionTitle, { color: theme.text }]}>Explore Skia Demos</Text>
+          <Text style={[styles.sectionTitle, { color: theme.text }]}>Demos</Text>
 
           <View style={styles.buttonContainer}>
             {[
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 8,
+    textAlign: "center",
   },
   canvasContainer: {
     alignItems: "center",
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginBottom: 16,
+    textAlign: "center",
   },
   buttonContainer: {
     gap: 16,
