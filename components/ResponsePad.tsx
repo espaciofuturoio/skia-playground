@@ -366,7 +366,6 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5E5',
     borderRadius: 12,
     height: Platform.OS === 'ios' ? 60 : 'auto',
-    height: Platform.OS === 'ios' ? 80 : 'auto',
   },
   optionText: {
     fontSize: 16,
