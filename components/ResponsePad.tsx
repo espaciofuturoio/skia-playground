@@ -120,7 +120,7 @@ export const ResponsePad = ({
       if (SCREEN_HEIGHT > 800) {
         return 180;
       }
-      return 170;
+      return 140;
     }
     if (Platform.OS === 'web') {
       return 180;
@@ -248,7 +248,7 @@ export const ResponsePad = ({
                     styles.optionText,
                     selectedOption.get() === option.id && styles.selectedOptionText
                   ]}>
-                    {option.text + ' ERROR HERE'}
+                    {option.text}
                   </Text>
                 </Animated.View>
               </Pressable>
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     gap: 16,
-    height: Platform.OS === 'ios' ? 60 : 'auto',
+    height: Platform.OS === 'ios' ? 50 : 'auto',
   },
   optionButton: {
     flex: 1,
