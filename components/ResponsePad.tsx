@@ -123,7 +123,8 @@ export const ResponsePad = ({
       return 140;
     }
     if (Platform.OS === 'web') {
-      return 180;
+      // Return smaller height for mobile web
+      return isMobile ? 140 : 180;
     }
     return 140;
   };
@@ -329,13 +330,13 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     flex: 1,
-    padding: 16,
-    gap: 16,
+    padding: Platform.OS === 'web' && isMobile ? 10 : 16,
+    gap: Platform.OS === 'web' && isMobile ? 8 : 16,
   },
   gridRow: {
     flex: 1,
     flexDirection: 'row',
-    gap: 16,
+    gap: Platform.OS === 'web' && isMobile ? 8 : 16,
     height: Platform.OS === 'ios' ? 50 : 'auto',
   },
   optionButton: {
@@ -358,17 +359,17 @@ const styles = StyleSheet.create({
   },
   optionContent: {
     flex: 1,
-    padding: Platform.OS === 'ios' ? 12 : 16,
+    padding: Platform.OS === 'web' && isMobile ? 8 : (Platform.OS === 'ios' ? 12 : 16),
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#E5E5E5',
     borderRadius: 12,
-    height: Platform.OS === 'ios' ? 60 : 'auto',
+    height: Platform.OS === 'ios' ? 60 : (Platform.OS === 'web' && isMobile ? 45 : 'auto'),
   },
   optionText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' && isMobile ? 14 : 16,
     fontWeight: '600',
     color: '#4B4B4B',
     textAlign: 'center',

@@ -4,6 +4,8 @@ import { ScaleGrey } from "@/features/ScaleGrey/ScaleGrey";
 import { ScaleRed } from "@/features/ScaleGrey/ScaleRed";
 import type { GridItem } from "@/features/ScaleGrey/types";
 import { router } from 'expo-router';
+import { Confetti } from 'react-native-fast-confetti';
+import { useState } from 'react';
 
 const greyScaleLeftGrid: GridItem[] = [
   { id: 1, row: 0, col: 0, type: "orange" },
@@ -33,8 +35,13 @@ const options = [
 ];
 
 export default function Demo6Page() {
+  const [isConfettiActive, setIsConfettiActive] = useState(false);
+
   const handleAnswerSubmit = (optionId: string, isCorrect: boolean) => {
     console.log(`Option ${optionId} selected, correct: ${isCorrect}`);
+    if (isCorrect) {
+      setIsConfettiActive(true);
+    } 
   };
 
   const handleBackPress = () => {
@@ -42,17 +49,20 @@ export default function Demo6Page() {
   };
 
   return (
-    <ResponsePad
-      title="¿Cuanto pesa una naranja?"
-      options={options}
-      correctOptionId="B"
-      onAnswerSubmit={handleAnswerSubmit}
-      onBackPress={handleBackPress}
-    >
-      <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
-        <ScaleGrey leftGrid={greyScaleLeftGrid} rightGrid={greyScaleRightGrid} debug={false} />
-        <ScaleRed grid={redScaleGrid} displayValue="88" debug={false} />
-      </View>
-    </ResponsePad>
+    <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+      <ResponsePad
+        title="¿Cuanto pesa una naranja?"
+        options={options}
+        correctOptionId="B"
+        onAnswerSubmit={handleAnswerSubmit}
+        onBackPress={handleBackPress}
+      >
+        <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+          <ScaleGrey leftGrid={greyScaleLeftGrid} rightGrid={greyScaleRightGrid} debug={false} />
+          <ScaleRed grid={redScaleGrid} displayValue="88" debug={false} />
+        </View>
+      </ResponsePad>
+      {isConfettiActive && <Confetti fadeOutOnEnd />}
+    </View>
   );
 }
