@@ -16,7 +16,8 @@ export const ScaleRed = ({
   height = 300,
   fontSize = 25,
   displayValue = "",
-  debug = false
+  debug = false,
+  scale = 1
 }: {
   grid: GridItem[];
   width?: number;
@@ -24,6 +25,7 @@ export const ScaleRed = ({
   fontSize?: number;
   displayValue?: string;
   debug?: boolean;
+  scale?: number;
 }) => {
   const font = useNotoMathSkiaFonts(fontSize);
   const scaleFont = useLedSledSkiaFonts(fontSize);
@@ -76,9 +78,6 @@ export const ScaleRed = ({
     xOriginScale,
     yOriginScale
   } = svgElements;
-
-  // Define circle properties relative to canvas size
-  const circleRadius = Math.min(canvasSizeX, canvasSizeY) * 0.02; // 2% of smallest dimension
 
   if (!font) return null;
 

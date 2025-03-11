@@ -28,10 +28,6 @@ export function DemoLayout({ title, children }: DemoLayoutProps) {
         <Text style={[styles.buttonText, { color: theme.text }]}>← Back</Text>
       </Pressable>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
-        </View>
-
         <View style={styles.canvasContainer}>
           {children}
         </View>
@@ -47,9 +43,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  header: {
-    marginBottom: 24,
   },
   title: {
     fontSize: 28,

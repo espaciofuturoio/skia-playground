@@ -19,7 +19,9 @@ export const ScaleGrey = ({
   height = 250,
   fontSize = 25,
   displayValue = "",
-  debug = false
+  debug = false,
+  gridColumns = 3,
+  gridRows = 3
 }: {
   leftGrid: GridItem[];
   rightGrid: GridItem[];
@@ -29,6 +31,8 @@ export const ScaleGrey = ({
   fontSize?: number;
   displayValue?: string;
   debug?: boolean;
+  gridColumns?: number;
+  gridRows?: number;
 }) => {
   const font = useNotoMathSkiaFonts(fontSize);
   const scaleFont = useLedSledSkiaFonts(fontSize);
@@ -49,8 +53,8 @@ export const ScaleGrey = ({
     const orangeHeight = orangeSvg?.height() || 0;
 
     // Make gridLeft spacing proportional to canvas width
-    const gridItemsPerRow = 3;
-    const gridSpacing = (scaleWidth / 2) / (gridItemsPerRow + 2); // Proportional spacing
+    // Adjusting for the max number of columns in the grid
+    const gridSpacing = (scaleWidth / 2) / (gridColumns + 2); // Proportional spacing
 
     const xOriginScale = Math.round(-scaleWidth / 2);
     const yOriginScale = Math.round(scaleHeight / 2) - yOffset;
@@ -66,7 +70,7 @@ export const ScaleGrey = ({
       xOriginScale,
       yOriginScale
     };
-  }, [displayValue]);
+  }, [displayValue, gridColumns]);
 
   const {
     scaleGreySvg,
