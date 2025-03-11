@@ -1,7 +1,6 @@
+import React from "react";
 import { Canvas, Group, ImageSVG, Skia, Text } from "@shopify/react-native-skia";
-import { scaleGreyWithDisplay } from "./scale-grey-with-display";
-import { scaleGrey } from "./scale-grey";
-
+import { scaleRed } from "./scale-red";
 import { orange } from "./orange";
 import { View } from "react-native";
 import { useLedSledSkiaFonts, useNotoMathSkiaFonts } from "@/components/skia-fonts/skia-fonts";
@@ -11,19 +10,15 @@ import { useMemo } from "react";
 import { DrawCorners } from "./DrawCorners";
 
 const yOffset = 40;
-export const ScaleGrey = ({
-  leftGrid,
-  rightGrid,
-  rightOffset = 230,
+export const ScaleRed = ({
+  grid,
   width = 380,
-  height = 250,
+  height = 300,
   fontSize = 25,
   displayValue = "",
   debug = false
 }: {
-  leftGrid: GridItem[];
-  rightGrid: GridItem[];
-  rightOffset?: number;
+  grid: GridItem[];
   width?: number;
   height?: number;
   fontSize?: number;
@@ -39,60 +34,64 @@ export const ScaleGrey = ({
 
   // Parse the SVG with useMemo to prevent unnecessary re-parsing
   const svgElements = useMemo(() => {
-    const [scaleGreySvg, orangeSvg, lemonSvg] = [
-      Skia.SVG.MakeFromString(displayValue ? scaleGreyWithDisplay : scaleGrey),
+    const [scaleRedSvg, orangeSvg, lemonSvg] = [
+      Skia.SVG.MakeFromString(scaleRed),
       Skia.SVG.MakeFromString(orange),
       Skia.SVG.MakeFromString(lemon)
     ];
 
-    const [scaleWidth, scaleHeight] = [scaleGreySvg?.width() || 0, scaleGreySvg?.height() || 0];
-    const orangeHeight = orangeSvg?.height() || 0;
+    const [scaleWidth, scaleHeight] = [scaleRedSvg?.width() || 0, scaleRedSvg?.height() || 0];
+    const [orangeWidth, orangeHeight] = [orangeSvg?.width() || 0, orangeSvg?.height() || 0];
+    const [lemonWidth, lemonHeight] = [lemonSvg?.width() || 0, lemonSvg?.height() || 0];
 
-    // Make gridLeft spacing proportional to canvas width
+    // Make grid spacing proportional to canvas width
     const gridItemsPerRow = 3;
-    const gridSpacing = (scaleWidth / 2) / (gridItemsPerRow + 2); // Proportional spacing
+    const gridSpacing = scaleWidth / (gridItemsPerRow + 2); // Proportional spacing
 
     const xOriginScale = Math.round(-scaleWidth / 2);
     const yOriginScale = Math.round(scaleHeight / 2) - yOffset;
 
     return {
-      scaleGreySvg,
+      scaleRedSvg,
       orangeSvg,
       lemonSvg,
       scaleWidth,
       scaleHeight,
+      orangeWidth,
       orangeHeight,
+      lemonWidth,
+      lemonHeight,
       gridSpacing,
       xOriginScale,
       yOriginScale
     };
-  }, [displayValue]);
+  }, []);
 
   const {
-    scaleGreySvg,
+    scaleRedSvg,
     orangeSvg,
     lemonSvg,
-    scaleWidth,
-    scaleHeight,
     orangeHeight,
     gridSpacing,
     xOriginScale,
     yOriginScale
   } = svgElements;
 
-  console.log({ scaleWidth, scaleHeight });
+  // Define circle properties relative to canvas size
+  const circleRadius = Math.min(canvasSizeX, canvasSizeY) * 0.02; // 2% of smallest dimension
 
   if (!font) return null;
 
   return (
     <View>
       <Canvas style={{ width: canvasSizeX, height: canvasSizeY }}>
+
         <Group transform={[
           { translateX: canvasSizeX / 2 },
           { translateY: canvasSizeY / 2 },
         ]}>
           <ImageSVG
-            svg={scaleGreySvg}
+            svg={scaleRedSvg}
             x={xOriginScale}
             y={yOriginScale}
           />
@@ -104,41 +103,29 @@ export const ScaleGrey = ({
             { translateY: Math.round(yOriginScale - orangeHeight) },
           ]}>
 
-            {/* Grid of items positioned above the scale - left side */}
-            {leftGrid.map((item) => {
+            {/* Grid of items positioned above the scale */}
+            {grid.map((item) => {
               const x = Math.round(item.row * gridSpacing) + (item.offset?.x || 1);
-              const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
-              const textSize = item.text?.length ? item.text?.length * fontSize : 0;
+              const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 1);
+              const textSize = item.text?.length ? item.text.length * fontSize : 0;
               return (
-                <Group key={item.id} >
+                <Group key={item.id}>
                   <ImageSVG
                     svg={item.type === "orange" ? orangeSvg : lemonSvg}
                     x={x}
                     y={y}
                   />
-                  {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
+                  {item.text && (
+                    <Text
+                      text={item.text}
+                      x={x + gridSpacing / 2 - 2 - textSize * 0.16}
+                      y={y + gridSpacing / 2 + 16}
+                      font={font}
+                    />
+                  )}
                 </Group>
-              )
-            }
-            )}
-
-            {/* Grid of items positioned above the scale - right side */}
-            {rightGrid.map((item) => {
-              const x = Math.round(item.row * gridSpacing + rightOffset) + (item.offset?.x || 1);
-              const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
-              const textSize = item.text?.length ? item.text?.length * fontSize : 0;
-              return (
-                <Group key={item.id} >
-                  <ImageSVG
-                    svg={item.type === "orange" ? orangeSvg : lemonSvg}
-                    x={x}
-                    y={y}
-                  />
-                  {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
-                </Group>
-              )
-            }
-            )}
+              );
+            })}
           </Group>
         </Group>
         {/* Corner circles to demonstrate positioning */}

@@ -33,12 +33,14 @@ export default function Index() {
 
           <View style={styles.buttonContainer}>
             {[
+
+              { id: "demo6", route: "/demo6" as const, title: "Multiple images" },
               { id: "demo1", route: "/demo1" as const, title: "SVG Rendering" },
               { id: "demo2", route: "/demo2" as const, title: "Animation Effects" },
               { id: "demo3", route: "/demo3" as const, title: "SVG Scaling" },
               { id: "demo4", route: "/demo4" as const, title: "SVG No Scaling" },
               { id: "demo5", route: "/demo5" as const, title: "SVG No Scaling" },
-              { id: "demo6", route: "/demo6" as const, title: "SVG No Scaling" },
+
             ].map((demo) => (
               <Pressable
                 key={demo.id}

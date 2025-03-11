@@ -7,10 +7,3 @@ export type GridItem = {
 	offset?: { x: number; y: number };
 };
 
-export type ScaleGreyProps = {
-	leftGrid: GridItem[];
-	rightGrid: GridItem[];
-	rightOffset?: number;
-	width?: number;
-	height?: number;
-};
