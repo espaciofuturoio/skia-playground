@@ -89,69 +89,69 @@ export const ScaleGrey = ({
   if (!font) return null;
 
   return (
-    <View>
-      <Canvas style={{ width: canvasSizeX, height: canvasSizeY }}>
-        <Group transform={[
-          { translateX: canvasSizeX / 2 },
-          { translateY: canvasSizeY / 2 },
-        ]}>
-          <ImageSVG
-            svg={scaleGreySvg}
-            x={xOriginScale}
-            y={yOriginScale}
-          />
 
-          {displayValue && <Text text={displayValue} x={xOriginScale + 50} y={yOriginScale + 73} font={scaleFont} />}
-
-          <Group transform={[
-            { translateX: xOriginScale },
-            { translateY: Math.round(yOriginScale - orangeHeight) },
-          ]}>
-
-            {/* Grid of items positioned above the scale - left side */}
-            {leftGrid.map((item) => {
-              const x = Math.round(item.row * gridSpacing) + (item.offset?.x || 1);
-              const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
-              const textSize = item.text?.length ? item.text?.length * fontSize : 0;
-              return (
-                <Group key={item.id} >
-                  <ImageSVG
-                    svg={item.type === "orange" ? orangeSvg : lemonSvg}
-                    x={x}
-                    y={y}
-                  />
-                  {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
-                </Group>
-              )
-            }
-            )}
-
-            {/* Grid of items positioned above the scale - right side */}
-            {rightGrid.map((item) => {
-              const x = Math.round(item.row * gridSpacing + rightOffset) + (item.offset?.x || 1);
-              const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
-              const textSize = item.text?.length ? item.text?.length * fontSize : 0;
-              return (
-                <Group key={item.id} >
-                  <ImageSVG
-                    svg={item.type === "orange" ? orangeSvg : lemonSvg}
-                    x={x}
-                    y={y}
-                  />
-                  {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
-                </Group>
-              )
-            }
-            )}
-          </Group>
-        </Group>
-        {/* Corner circles to demonstrate positioning */}
-        <DrawCorners
-          debug={debug}
-          width={canvasSizeX}
-          height={canvasSizeY}
+    <Canvas style={{ width: canvasSizeX, height: canvasSizeY }}>
+      <Group transform={[
+        { translateX: canvasSizeX / 2 },
+        { translateY: canvasSizeY / 2 },
+      ]}>
+        <ImageSVG
+          svg={scaleGreySvg}
+          x={xOriginScale}
+          y={yOriginScale}
         />
-      </Canvas>
-    </View>
+
+        {displayValue && <Text text={displayValue} x={xOriginScale + 50} y={yOriginScale + 73} font={scaleFont} />}
+
+        <Group transform={[
+          { translateX: xOriginScale },
+          { translateY: Math.round(yOriginScale - orangeHeight) },
+        ]}>
+
+          {/* Grid of items positioned above the scale - left side */}
+          {leftGrid.map((item) => {
+            const x = Math.round(item.row * gridSpacing) + (item.offset?.x || 1);
+            const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
+            const textSize = item.text?.length ? item.text?.length * fontSize : 0;
+            return (
+              <Group key={item.id} >
+                <ImageSVG
+                  svg={item.type === "orange" ? orangeSvg : lemonSvg}
+                  x={x}
+                  y={y}
+                />
+                {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
+              </Group>
+            )
+          }
+          )}
+
+          {/* Grid of items positioned above the scale - right side */}
+          {rightGrid.map((item) => {
+            const x = Math.round(item.row * gridSpacing + rightOffset) + (item.offset?.x || 1);
+            const y = -Math.round(item.col * gridSpacing) + (item.offset?.y || 4);
+            const textSize = item.text?.length ? item.text?.length * fontSize : 0;
+            return (
+              <Group key={item.id} >
+                <ImageSVG
+                  svg={item.type === "orange" ? orangeSvg : lemonSvg}
+                  x={x}
+                  y={y}
+                />
+                {item.text && <Text text={item.text} x={x + gridSpacing / 2 - 2 - textSize * 0.16} y={y + gridSpacing / 2 + 16} font={font} />}
+              </Group>
+            )
+          }
+          )}
+        </Group>
+      </Group>
+      {/* Corner circles to demonstrate positioning */}
+      <DrawCorners
+        debug={debug}
+        width={canvasSizeX}
+        height={canvasSizeY}
+      />
+    </Canvas>
+
   );
 };
