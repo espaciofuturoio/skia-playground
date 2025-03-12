@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, Group, ImageSVG, Skia, Text } from "@shopify/react-native-skia";
+import { Canvas, Group, ImageSVG, Skia, SkSVG, Text, type SkFont } from "@shopify/react-native-skia";
 import { scaleGreyWithDisplay } from "./scale-grey-with-display";
 import { scaleGrey } from "./scale-grey";
 import { scaleRed } from "./scale-red";
@@ -9,6 +9,7 @@ import { lemon } from "./lemon";
 import type { GridItem } from "./types";
 import { useMemo } from "react";
 import { DrawCorners } from "./DrawCorners";
+import { useSharedValue } from "react-native-reanimated";
 
 const yRedOffset = 0
 const yGreyOffset = 59
@@ -19,6 +20,38 @@ const gridColumns = 3;
 const yFruitTextOffset = 11;
 const yRedDisplayTextOffset = 74;
 const xRedDisplayTextOffset = 75;
+
+
+const RedGridItem = ({ item,
+  gridSpacing,
+  fruitFont,
+  scalesFontSize,
+  orangeSvg,
+  lemonSvg,
+  x,
+  y,
+  textSize }:
+  {
+    item: GridItem, gridSpacing: number, fruitFont: SkFont, scalesFontSize: number, orangeSvg: SkSVG,
+    lemonSvg: SkSVG, x: number, y: number, textSize: number
+  }) => {
+  return (
+    <Group key={`red-${item.id}`}>
+      <ImageSVG
+        svg={item.type === "orange" ? orangeSvg : lemonSvg}
+        x={x}
+        y={y}
+      />
+      {item.text && (
+        <Text
+          text={item.text}
+          x={x + gridSpacing / 2 - 2 - textSize * 0.16}
+          y={y + gridSpacing / 2 + 11}
+          font={fruitFont}
+        />
+      )}
+    </Group>)
+}
 
 export const CombinedScale = ({
   greyLeftGrid = [],
@@ -106,7 +139,7 @@ export const CombinedScale = ({
     redYOriginScale
   } = svgElements;
 
-  if (!fruitFont) return null;
+  if (!fruitFont || !scaleFont || !orangeSvg || !lemonSvg) return null;
 
   return (
     <Canvas style={{ width: canvasSizeX, height: canvasSizeY }}>
@@ -215,21 +248,18 @@ export const CombinedScale = ({
                 const y = -Math.round(item.row * gridSpacing) + (item.offset?.y || 1);
                 const textSize = item.text?.length ? item.text.length * scalesFontSize : 0;
                 return (
-                  <Group key={`red-${item.id}`}>
-                    <ImageSVG
-                      svg={item.type === "orange" ? orangeSvg : lemonSvg}
-                      x={x}
-                      y={y}
-                    />
-                    {item.text && (
-                      <Text
-                        text={item.text}
-                        x={x + gridSpacing / 2 - 2 - textSize * 0.16}
-                        y={y + gridSpacing / 2 + 11}
-                        font={fruitFont}
-                      />
-                    )}
-                  </Group>
+                  <RedGridItem
+                    key={`red-${item.id}`}
+                    item={item}
+                    gridSpacing={gridSpacing}
+                    fruitFont={fruitFont}
+                    scalesFontSize={scalesFontSize}
+                    x={x}
+                    y={y}
+                    textSize={textSize}
+                    orangeSvg={orangeSvg}
+                    lemonSvg={lemonSvg}
+                  />
                 );
               })}
             </Group>
