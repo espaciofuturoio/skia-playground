@@ -4,7 +4,7 @@ import { ScaleGrey } from "@/features/ScaleGrey/ScaleGrey";
 import { ScaleRed } from "@/features/ScaleGrey/ScaleRed";
 import type { GridItem } from "@/features/ScaleGrey/types";
 import { router } from 'expo-router';
-import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
+import { Confetti, type ConfettiMethods } from 'react-native-fast-confetti';
 import { useRef, useState } from 'react';
 
 const greyScaleLeftGrid: GridItem[] = [

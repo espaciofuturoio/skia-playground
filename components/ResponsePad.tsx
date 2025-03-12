@@ -120,11 +120,11 @@ export const ResponsePad = ({
       if (SCREEN_HEIGHT > 800) {
         return 180;
       }
-      return 140;
+      return 130;
     }
     if (Platform.OS === 'web') {
       // Return smaller height for mobile web
-      return isMobile ? 140 : 180;
+      return isMobile ? 120 : 180;
     }
     return 140;
   };
@@ -132,7 +132,7 @@ export const ResponsePad = ({
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={[styles.header, { paddingTop: Math.max(insets.top, Platform.OS === 'ios' ? 44 : 20) }]}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, Platform.OS === 'web' && isMobile ? 20 : 20) }]}>
         {showBackButton && (
           <Pressable
             style={styles.backButton}
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
     gap: 16,
   },
   backButton: {
@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#4B4B4B',
     textAlign: 'center',
+    marginBottom: 20,
   },
   childrenContainer: {
     flex: 1,
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   optionContent: {
     flex: 1,
-    padding: Platform.OS === 'web' && isMobile ? 8 : (Platform.OS === 'ios' ? 12 : 16),
+    padding: 8,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
