@@ -5,42 +5,40 @@ import type { GridItem } from "@/features/ScaleGrey/types";
 import { router } from 'expo-router';
 import { Confetti, type ConfettiMethods } from 'react-native-fast-confetti';
 import { useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 // Initial configuration - two oranges
-const initialLeftGrid: GridItem[] = [
-  { id: 1, row: 0, col: 0, type: "orange" },
+const initialGreyLeftGrid: GridItem[] = [
+  { id: uuidv4(), row: 0, col: 0, type: "orange" },
 ];
 
-const initialRightGrid: GridItem[] = [
-  { id: 1, row: 0, col: 0, type: "lemon" },
-  { id: 2, row: 0, col: 1, type: "lemon" },
-  { id: 3, row: 0, col: 2, type: "lemon" },
-  { id: 4, row: 1, col: 0, type: "lemon" },
+const initialGreyRightGrid: GridItem[] = [
+  { id: uuidv4(), row: 0, col: 0, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 0, type: "lemon" },
 ];
 
-// Configuration for eight lemons
-const lemonLeftGrid: GridItem[] = [
-  { id: 1, row: 0, col: 0, type: "lemon" },
-  { id: 2, row: 1, col: 0, type: "lemon" },
+const secondRedGrid: GridItem[] = [
+  { id: uuidv4(), row: 0, col: 0, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 3, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 0, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 2, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 3, type: "lemon" },
+  { id: uuidv4(), row: 2, col: 0, type: "lemon" },
+  { id: uuidv4(), row: 2, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 2, col: 2, type: "lemon" },
 ];
 
-const lemonRightGrid: GridItem[] = [
-  { id: 1, row: 0, col: 0, type: "lemon" },
-  { id: 2, row: 0, col: 1, type: "lemon" },
-  { id: 3, row: 0, col: 2, type: "lemon" },
-  { id: 4, row: 1, col: 0, type: "lemon" },
-  { id: 5, row: 1, col: 1, type: "lemon" },
-  { id: 6, row: 1, col: 2, type: "lemon" },
-  { id: 7, row: 2, col: 0, type: "lemon" },
-  { id: 8, row: 2, col: 1, type: "lemon" },
-];
-
-const redScaleGrid: GridItem[] = [
-  { id: 1, row: 0, col: 0, type: "orange" },
-  { id: 2, row: 1, col: 0, type: "orange" },
-  { id: 3, row: 0, col: 1, type: "lemon" },
-  { id: 4, row: 1, col: 1, type: "lemon" },
-  { id: 5, row: 0, col: 2, type: "lemon" },
+const firstRedGrid: GridItem[] = [
+  { id: uuidv4(), row: 0, col: 0, type: "orange" },
+  { id: uuidv4(), row: 1, col: 0, type: "orange" },
+  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 1, col: 1, type: "lemon" },
+  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
 ];
 
 // Define the options based on the context
@@ -54,22 +52,11 @@ const options = [
 export default function Demo7Page() {
   const [isConfettiActive, setIsConfettiActive] = useState(false);
   const confettiRef = useRef<ConfettiMethods>(null);
-
-  // State to track which version of the grid to show
-  const [showLemons, setShowLemons] = useState(false);
-  // State to trigger animation
-  const [isAnimating, setIsAnimating] = useState(false);
-  // Current grids based on state
-  const [leftGrid, setLeftGrid] = useState(initialLeftGrid);
-  const [rightGrid, setRightGrid] = useState(initialRightGrid);
-
+  const [currentRedGrid, setCurrentRedGrid] = useState<GridItem[]>(firstRedGrid);
   const handleAnswerSubmit = (optionId: string, isCorrect: boolean) => {
     console.log(`Option ${optionId} selected, correct: ${isCorrect}`);
     setIsConfettiActive(isCorrect);
-
-    if (isCorrect) {
-      confettiRef.current?.restart();
-    }
+    if (isCorrect) confettiRef.current?.restart();
   };
 
   const handleBackPress = () => {
@@ -77,21 +64,7 @@ export default function Demo7Page() {
   };
 
   const handleSwitchFruits = () => {
-    // Start the animation
-    setIsAnimating(true);
-  };
-
-  const handleAnimationComplete = () => {
-    // After animation completes, update the actual grid data
-    if (showLemons) {
-      setLeftGrid(initialLeftGrid);
-      setRightGrid(initialRightGrid);
-    } else {
-      setLeftGrid(lemonLeftGrid);
-      setRightGrid(lemonRightGrid);
-    }
-    setShowLemons(!showLemons);
-    setIsAnimating(false);
+    setCurrentRedGrid(currentRedGrid === firstRedGrid ? secondRedGrid : firstRedGrid);
   };
 
   return (
@@ -105,30 +78,24 @@ export default function Demo7Page() {
       >
         <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
           <CombinedScale
-            leftGrid={leftGrid}
-            rightGrid={rightGrid}
-            redGrid={redScaleGrid}
+            greyLeftGrid={initialGreyLeftGrid}
+            greyRightGrid={initialGreyRightGrid}
+            redGrid={currentRedGrid}
             redDisplayValue="88"
-            debug={false}
+            debug={true}
             scalesFontSize={25}
             fruitFontSize={19}
-            animateItems={isAnimating}
-            onAnimationComplete={handleAnimationComplete}
           />
 
           <View style={styles.controlsContainer}>
             <TouchableOpacity
               style={[styles.button]}
               onPress={handleSwitchFruits}
-              disabled={isAnimating}
             >
               <Text style={styles.buttonText}>
-                {showLemons ? 'Show 2 Oranges' : 'Show 8 Lemons'}
+                Animate
               </Text>
             </TouchableOpacity>
-            <Text style={styles.resultText}>
-              {showLemons ? '8 lemons = 2 oranges' : '2 oranges = 8 lemons'}
-            </Text>
           </View>
         </View>
       </ResponsePad>

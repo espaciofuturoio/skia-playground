@@ -11,18 +11,18 @@ import { useMemo } from "react";
 import { DrawCorners } from "./DrawCorners";
 
 const yRedOffset = 0
-const yGreyOffset = 49
+const yGreyOffset = 59
 
 const canvasSizeX = 380;
-const canvasSizeY = 400;
+const canvasSizeY = 420;
 const gridColumns = 3;
 const yFruitTextOffset = 11;
 const yRedDisplayTextOffset = 74;
 const xRedDisplayTextOffset = 75;
 
 export const CombinedScale = ({
-  leftGrid = [],
-  rightGrid = [],
+  greyLeftGrid = [],
+  greyRightGrid = [],
   redGrid = [],
   showGreyScale = true,
   showRedScale = true,
@@ -33,8 +33,8 @@ export const CombinedScale = ({
   redDisplayValue = "",
   debug = false,
 }: {
-  leftGrid?: GridItem[];
-  rightGrid?: GridItem[];
+  greyLeftGrid?: GridItem[];
+  greyRightGrid?: GridItem[];
   redGrid?: GridItem[];
   showGreyScale?: boolean;
   showRedScale?: boolean;
@@ -137,7 +137,7 @@ export const CombinedScale = ({
               { translateY: Math.round(greyYOriginScale - orangeHeight) },
             ]}>
               {/* Grid of items positioned above the scale - left side */}
-              {leftGrid.map((item) => {
+              {greyLeftGrid.map((item) => {
                 const x = Math.round(item.col * gridSpacing) + (item.offset?.x || 1);
                 const y = -Math.round(item.row * gridSpacing) + (item.offset?.y || 4);
                 const textSize = item.text?.length ? item.text?.length * scalesFontSize : 0;
@@ -161,7 +161,7 @@ export const CombinedScale = ({
               })}
 
               {/* Grid of items positioned above the scale - right side */}
-              {rightGrid.map((item) => {
+              {greyRightGrid.map((item) => {
                 const x = Math.round(item.col * gridSpacing + rightOffset) + (item.offset?.x || 1);
                 const y = -Math.round(item.row * gridSpacing) + (item.offset?.y || 4);
                 const textSize = item.text?.length ? item.text?.length * scalesFontSize : 0;

@@ -1,9 +1,8 @@
 export type GridItem = {
-	id: number;
+	id: string;
 	row: number;
 	col: number;
 	type: "orange" | "lemon";
 	text?: string;
 	offset?: { x: number; y: number };
 };
-
