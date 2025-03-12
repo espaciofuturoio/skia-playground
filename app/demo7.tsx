@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { Confetti, type ConfettiMethods } from 'react-native-fast-confetti';
 import { useRef, useState } from 'react';
 
+// Updated grid data with swapped row/column interpretation
 const greyScaleLeftGrid: GridItem[] = [
   { id: 1, row: 0, col: 0, type: "orange" },
 ];
@@ -19,10 +20,10 @@ const greyScaleRightGrid: GridItem[] = [
 
 const redScaleGrid: GridItem[] = [
   { id: 1, row: 0, col: 0, type: "orange" },
-  { id: 2, row: 0, col: 1, type: "orange" },
-  { id: 3, row: 0, col: 2, type: "lemon" },
-  { id: 4, row: 1, col: 0, type: "lemon" },
-  { id: 5, row: 1, col: 1, type: "lemon" },
+  { id: 2, row: 1, col: 0, type: "orange" },
+  { id: 3, row: 0, col: 1, type: "lemon" },
+  { id: 4, row: 1, col: 1, type: "lemon" },
+  { id: 5, row: 0, col: 2, type: "lemon" },
 ];
 
 // Define the options based on the context
@@ -65,6 +66,8 @@ export default function Demo7Page() {
             redGrid={redScaleGrid}
             redDisplayValue="88"
             debug={false}
+            scalesFontSize={25}
+            fruitFontSize={19}
           />
         </View>
       </ResponsePad>
