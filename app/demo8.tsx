@@ -82,7 +82,7 @@ export default function Demo8Page() {
             greyRightGrid={initialGreyRightGrid}
             redGrid={currentRedGrid}
             redDisplayValue="88"
-            debug={true}
+            debug={false}
             scalesFontSize={25}
             fruitFontSize={19}
           />

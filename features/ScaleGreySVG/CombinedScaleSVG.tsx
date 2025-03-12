@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { View } from "react-native";
 import Svg, { G, SvgXml, Text as SvgText } from "react-native-svg";
 import { scaleGreyWithDisplay } from "./scale-grey-with-display";
@@ -23,7 +23,7 @@ type SkiaFont = {
 } | null;
 
 const yRedOffset = 0
-const yGreyOffset = 59
+const yGreyOffset = 40
 
 const canvasSizeX = 380;
 const canvasSizeY = 420;
@@ -123,73 +123,38 @@ export const CombinedScaleSVG = ({
   const fruitFont = convertSkiaFontToFontData(fruitSkiaFont, fruitFontSize);
   const scaleFont = convertSkiaFontToFontData(scaleSkiaFont, scalesFontSize);
 
-  // Prepare SVG data for use with SvgXml
-  const svgElements = useMemo(() => {
-    const scaleGreySvgData = greyDisplayValue ? scaleGreyWithDisplay : scaleGrey;
-    const scaleRedSvgData = scaleRed;
-    const orangeSvgData = orange;
-    const lemonSvgData = lemon;
+  // Prepare SVG data for use with SvgXml - no need for useMemo with React compiler
+  const scaleGreySvgData = greyDisplayValue ? scaleGreyWithDisplay : scaleGrey;
+  const scaleRedSvgData = scaleRed;
+  const orangeSvgData = orange;
+  const lemonSvgData = lemon;
 
-    // Since we don't have access to Skia's measurement functions, 
-    // we'll need to hardcode or extract dimensions from the SVG
-    const greyScaleWidth = 215.449; // From viewBox in SVG
-    const greyScaleHeight = 57.848;
-    const redScaleWidth = 230; // Estimated from the original scale
-    const redScaleHeight = 60;
-    const orangeWidth = 16.859; // From viewBox in SVG
-    const orangeHeight = 19.606;
-    const lemonWidth = 20; // Estimated size
-    const lemonHeight = 20;
+  // Since we don't have access to Skia's measurement functions, 
+  // we'll need to hardcode or extract dimensions from the SVG
+  const greyScaleWidth = 215.449; // From viewBox in SVG
+  const greyScaleHeight = 57.848;
+  const redScaleWidth = 230; // Estimated from the original scale
+  const redScaleHeight = 60;
+  const orangeWidth = 16.859; // From viewBox in SVG
+  const orangeHeight = 19.606;
+  const lemonWidth = 20; // Estimated size
+  const lemonHeight = 20;
 
-    // Make grid spacing proportional to canvas width
-    const gridSpacing = (greyScaleWidth / 2) / (gridColumns + 2); // Proportional spacing
+  // Make grid spacing proportional to canvas width
+  const gridSpacing = 35; // Proportional spacing
 
-    // Adjusted origin scales to match Skia positioning
-    const greyXOriginScale = Math.round(-greyScaleWidth / 2);
-    const greyYOriginScale = Math.round(redScaleHeight / 2) - yGreyOffset;
+  // Adjusted origin scales to match Skia positioning
+  const greyXOriginScale = Math.round(-canvasSizeX / 2) + 20;
+  const greyYOriginScale = Math.round(redScaleHeight / 2) - yGreyOffset;
 
-    const redXOriginScale = Math.round(-redScaleWidth / 2);
-    const redYOriginScale = Math.round(canvasSizeY / 2) - yRedOffset;
-
-    return {
-      scaleGreySvgData,
-      scaleRedSvgData,
-      orangeSvgData,
-      lemonSvgData,
-      greyScaleWidth,
-      greyScaleHeight,
-      redScaleWidth,
-      redScaleHeight,
-      orangeWidth,
-      orangeHeight,
-      lemonWidth,
-      lemonHeight,
-      gridSpacing,
-      greyXOriginScale,
-      greyYOriginScale,
-      redXOriginScale,
-      redYOriginScale
-    };
-  }, [greyDisplayValue]);
-
-  const {
-    scaleGreySvgData,
-    scaleRedSvgData,
-    orangeSvgData,
-    lemonSvgData,
-    orangeHeight,
-    gridSpacing,
-    greyXOriginScale,
-    greyYOriginScale,
-    redXOriginScale,
-    redYOriginScale
-  } = svgElements;
+  const redXOriginScale = Math.round(-canvasSizeX / 4) + 15;
+  const redYOriginScale = Math.round(canvasSizeY / 2) - yRedOffset;
 
   if (!fruitFont || !scaleFont) return null;
 
   return (
     <View style={{ width: canvasSizeX, height: canvasSizeY }}>
-      <View style={{ width: canvasSizeX, height: canvasSizeY, borderWidth: 1, borderColor: "red" }}>
+      <View style={{ width: canvasSizeX, height: canvasSizeY, ...debug ? { borderWidth: 1, borderColor: "red" } : {} }}>
         <Svg
           width="100%"
           height="100%"
@@ -219,7 +184,7 @@ export const CombinedScaleSVG = ({
                   </SvgText>
                 )}
 
-                <G transform={`translate(${greyXOriginScale}, ${Math.round(greyYOriginScale - orangeHeight)})`}>
+                <G transform={`translate(${greyXOriginScale}, ${Math.round(greyYOriginScale - 35)})`}>
                   {/* Grid of items positioned above the scale - left side */}
                   {greyLeftGrid.map((item) => {
                     const x = Math.round(item.col * gridSpacing) + (item.offset?.x || 1);
@@ -294,8 +259,6 @@ export const CombinedScaleSVG = ({
                   xml={scaleRedSvgData}
                   x={redXOriginScale}
                   y={redYOriginScale}
-                  width={230}
-                  height={60}
                   preserveAspectRatio="xMidYMid meet"
                 />
 
@@ -311,7 +274,7 @@ export const CombinedScaleSVG = ({
                   </SvgText>
                 )}
 
-                <G transform={`translate(${redXOriginScale}, ${Math.round(redYOriginScale - orangeHeight)})`}>
+                <G transform={`translate(${redXOriginScale}, ${Math.round(redYOriginScale - 35)})`}>
                   {/* Grid of items positioned above the red scale */}
                   {redGrid.map((item) => {
                     const x = Math.round(item.col * gridSpacing) + (item.offset?.x || 1);
