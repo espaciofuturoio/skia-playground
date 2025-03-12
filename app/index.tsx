@@ -35,6 +35,7 @@ export default function Index() {
             {[
 
               { id: "demo7", route: "/demo7" as const, title: "Combined scale" },
+              { id: "demo8", route: "/demo8" as const, title: "Combined scale SVG" },
               { id: "demo6", route: "/demo6" as const, title: "Multiple images" },
 
               { id: "demo1", route: "/demo1" as const, title: "SVG Rendering" },
