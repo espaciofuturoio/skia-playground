@@ -64,7 +64,7 @@ export default function Demo7Page() {
             rightGrid={greyScaleRightGrid}
             redGrid={redScaleGrid}
             redDisplayValue="88"
-            debug={true}
+            debug={false}
           />
         </View>
       </ResponsePad>
