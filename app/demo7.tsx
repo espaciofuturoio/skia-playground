@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ResponsePad } from '@/components/ResponsePad';
 import { CombinedScale } from "@/features/ScaleGrey/CombinedScale";
 import type { GridItem } from "@/features/ScaleGrey/types";
@@ -41,6 +41,7 @@ export default function Demo7Page() {
   const handleAnswerSubmit = (optionId: string, isCorrect: boolean) => {
     console.log(`Option ${optionId} selected, correct: ${isCorrect}`);
     setIsConfettiActive(isCorrect);
+
     if (isCorrect) {
       confettiRef.current?.restart();
     }
@@ -48,6 +49,9 @@ export default function Demo7Page() {
 
   const handleBackPress = () => {
     router.push('/');
+  };
+
+  const handleSwitchFruits = () => {
   };
 
   return (
@@ -69,9 +73,51 @@ export default function Demo7Page() {
             scalesFontSize={25}
             fruitFontSize={19}
           />
+
+          <View style={styles.controlsContainer}>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={handleSwitchFruits}
+            >
+              <Text style={styles.buttonText}>
+                Switch Fruits
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.resultText}>
+              2 oranges = 8 lemons
+            </Text>
+          </View>
         </View>
       </ResponsePad>
       {isConfettiActive && <Confetti ref={confettiRef} fadeOutOnEnd isInfinite={false} fallDuration={3000} />}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  controlsContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#FF9500',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resultText: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
+  }
+});
