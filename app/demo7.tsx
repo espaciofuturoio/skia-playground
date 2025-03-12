@@ -5,40 +5,41 @@ import type { GridItem } from "@/features/ScaleGrey/types";
 import { router } from 'expo-router';
 import { Confetti, type ConfettiMethods } from 'react-native-fast-confetti';
 import { useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
+const randomUUID = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 // Initial configuration - two oranges
 const initialGreyLeftGrid: GridItem[] = [
-  { id: uuidv4(), row: 0, col: 0, type: "orange" },
+  { id: randomUUID(), row: 0, col: 0, type: "orange" },
 ];
 
 const initialGreyRightGrid: GridItem[] = [
-  { id: uuidv4(), row: 0, col: 0, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 0, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 0, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 2, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 0, type: "lemon" },
 ];
 
 const secondRedGrid: GridItem[] = [
-  { id: uuidv4(), row: 0, col: 0, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 3, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 0, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 2, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 3, type: "lemon" },
-  { id: uuidv4(), row: 2, col: 0, type: "lemon" },
-  { id: uuidv4(), row: 2, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 2, col: 2, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 0, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 2, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 3, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 0, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 2, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 3, type: "lemon" },
+  { id: randomUUID(), row: 2, col: 0, type: "lemon" },
+  { id: randomUUID(), row: 2, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 2, col: 2, type: "lemon" },
 ];
 
 const firstRedGrid: GridItem[] = [
-  { id: uuidv4(), row: 0, col: 0, type: "orange" },
-  { id: uuidv4(), row: 1, col: 0, type: "orange" },
-  { id: uuidv4(), row: 0, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 1, col: 1, type: "lemon" },
-  { id: uuidv4(), row: 0, col: 2, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 0, type: "orange" },
+  { id: randomUUID(), row: 1, col: 0, type: "orange" },
+  { id: randomUUID(), row: 0, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 1, col: 1, type: "lemon" },
+  { id: randomUUID(), row: 0, col: 2, type: "lemon" },
 ];
 
 // Define the options based on the context

@@ -25,9 +25,8 @@ type SkiaFont = {
 const yRedOffset = 0
 const yGreyOffset = 40
 
-const canvasSizeX = 380;
-const canvasSizeY = 420;
-const gridColumns = 3;
+const canvasSizeX = 375;
+const canvasSizeY = 375;
 const yFruitTextOffset = 11;
 const yRedDisplayTextOffset = 74;
 const xRedDisplayTextOffset = 75;
@@ -102,6 +101,7 @@ export const CombinedScaleSVG = ({
   greyDisplayValue = "",
   redDisplayValue = "",
   debug = false,
+  scale = 1,
 }: {
   greyLeftGrid?: GridItem[];
   greyRightGrid?: GridItem[];
@@ -159,6 +159,7 @@ export const CombinedScaleSVG = ({
           width="100%"
           height="100%"
           viewBox={`0 0 ${canvasSizeX} ${canvasSizeY}`}
+          transform={`scale(${scale})`}
           preserveAspectRatio="xMidYMid meet"
         >
           <G transform={`translate(${canvasSizeX / 2}, ${canvasSizeY / 4})`}>
