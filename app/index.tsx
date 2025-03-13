@@ -22,7 +22,7 @@ export default function Index() {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={[styles.title, { color: theme.text }]}>React Native Skia Playground</Text>
+            <Text style={[styles.title, { color: theme.text }]}>React Native Skia Playground V2</Text>
           </View>
 
           <View style={styles.canvasContainer}>

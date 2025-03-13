@@ -9,6 +9,7 @@ import { useLedSledSkiaFonts, useNotoMathSkiaFonts } from "@/components/skia-fon
 import { lemon } from "./lemon";
 import type { GridItem } from "./types";
 import { DrawCorners } from "./DrawCorners";
+import { Animation } from "./Animation";
 
 // Define a FontData interface
 interface FontData {
@@ -153,7 +154,7 @@ export const CombinedScaleSVGNative = ({
   if (!fruitFont || !scaleFont) return null;
 
   return (
-    <View style={{ width: canvasSizeX, height: canvasSizeY }}>
+    <View>
       <View style={{ width: canvasSizeX, height: canvasSizeY, ...debug ? { borderWidth: 1, borderColor: "red" } : {} }}>
         <Svg
           width="100%"
@@ -305,7 +306,7 @@ export const CombinedScaleSVGNative = ({
           {debug && <DrawCorners width={canvasSizeX} height={canvasSizeY} />}
         </Svg>
       </View>
-
+      <Animation />
     </View>
   );
 }; 
