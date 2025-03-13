@@ -33,9 +33,9 @@ export default function Index() {
 
           <View style={styles.buttonContainer}>
             {[
-
-              { id: "demo7", route: "/demo7" as const, title: "Combined scale" },
+              { id: "demo9", route: "/demo9" as const, title: "Combined scale SVG Native" },
               { id: "demo8", route: "/demo8" as const, title: "Combined scale SVG" },
+              { id: "demo7", route: "/demo7" as const, title: "Combined scale" },
               { id: "demo6", route: "/demo6" as const, title: "Multiple images" },
 
               { id: "demo1", route: "/demo1" as const, title: "SVG Rendering" },
